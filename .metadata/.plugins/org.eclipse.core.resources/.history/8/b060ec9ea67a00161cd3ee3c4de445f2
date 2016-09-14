@@ -1,0 +1,53 @@
+package jdbcdemo;
+import java.io.FileInputStream;
+import java.sql.*;
+
+import java.util.Properties;
+
+public class JdbcProperties {
+	
+	static Connection myConn=null;
+	static Statement stmt= null;
+	static ResultSet rs=null;
+	
+
+	public static void main(String[] args) throws SQLException {
+		try{
+			
+		//1. Load the properties file
+		Properties props = new Properties();
+		
+		props.load(new FileInputStream("demonstration.properties"));
+		//props.load(new FileInputStream
+		
+		//2 read the props
+		String theUser = props.getProperty("user");
+		String thePassword = props.getProperty("password");
+		String theDburl = props.getProperty("dburl");
+		
+		//3 get connection
+		
+		myConn= (Connection)DriverManager.getConnection(theDburl, theUser, thePassword);
+		
+		// create statement
+		stmt=myConn.createStatement();
+		
+		//execute query
+		rs= stmt.executeQuery("Select * from student");
+		System.out.println("First Name" + "\t" + "Last Name");
+		while(rs.next())
+		System.out.println(rs.getString("first_name") + "\t" + rs.getString("last_name"));
+		
+	}catch(Exception ex){
+		ex.printStackTrace();
+		
+	}finally{
+		if(myConn!= null);
+		myConn.close();
+		if(stmt != null)
+		stmt.close();
+	}
+
+	}
+
+}
